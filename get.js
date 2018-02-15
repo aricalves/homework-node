@@ -9,10 +9,13 @@ const getPackageNames = function(count = 10, offset = 0, topPackages = []) {
       const $ = cheerio.load(html);
       // traverse html for every <a> with class 'name'
       $('.name').each((idx, el) => {
-        if (idx < count) { // not very efficient when searching for less than an entire page, but simple
+        console.log(idx)
+        if (idx < count) {
           offset++;
           const href = el.attribs.href;
           topPackages.push(trim(href));
+        } else {
+          return false; // break out of loop when COUNT is reached
         }
       });
       if (topPackages.length >= count) {

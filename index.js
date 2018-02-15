@@ -14,6 +14,6 @@ function downloadPackages (count, callback) {
     })
     .then(() => callback())
     .catch(err => callback(err));
-}
+};
 
 module.exports = downloadPackages
