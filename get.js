@@ -1,21 +1,26 @@
 const cheerio = require('cheerio');
 const rp = require('request-promise');
 
-let limit = 10
-const URL = 'https://www.npmjs.com/browse/depended';
 
-const getPackageNames = function() {
+const getPackageNames = function(limit = 10, offset = 0, topPackages = []) {
+  const URL = `https://www.npmjs.com/browse/depended?offset=${offset}`;
+
   return rp(URL)
     .then(html => {
       const $ = cheerio.load(html);
-      const topPackages = [];
       $('.name').each((idx, el) => {
         if (idx < limit) {
-          const packageName = el.attribs.href;
-          topPackages.push(trim(packageName));
+          offset++;
+          const href = el.attribs.href;
+          topPackages.push(trim(href));
         }
       });
-      return topPackages;
+      if (topPackages.length >= limit) {
+        return topPackages;
+      } else { // handle pagination
+        limit -= topPackages.length;
+        return getPackageNames(limit, offset, topPackages);
+      }
     })
     .catch(err => {
       // write to console for now
@@ -23,7 +28,9 @@ const getPackageNames = function() {
     });
 };
 
-const trim = longName => longName.split('/')[2];
+const trim = endPoint => endPoint.split('/')[2];
 
-getPackageNames()
-  .then(packageList => console.log(packageList))
+// getPackageNames(40)
+//   .then(e => console.log(e.length, e))
+
+module.exports = getPackageNames;

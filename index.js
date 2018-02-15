@@ -1,7 +1,9 @@
 'use strict'
 
-module.exports = downloadPackages
+const getPackageNames = require('./get');
 
 function downloadPackages (count, callback) {
 
 }
+
+module.exports = downloadPackages
