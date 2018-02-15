@@ -9,10 +9,11 @@ function downloadPackages (count, callback) {
   getPackageNames(count)
     .then(listOfPackages => {
       asyncEach(listOfPackages, function(title) {
-        download(title, { dir: `${__dirname}/packages/${title}` })
+        download(title, { dir: `${__dirname}/packages/${title}` });
       });
     })
-    .catch(err => console.log(err));
+    .then(() => callback())
+    .catch(err => callback(err));
 }
 
 module.exports = downloadPackages
