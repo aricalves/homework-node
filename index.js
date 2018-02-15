@@ -1,7 +1,7 @@
 'use strict'
 
 const asyncEach = require('each-async');
-const download = require('npm-registry-download'); // lol npm
+const download = require('npm-registry-download');
 
 const getPackageNames = require('./get');
 
