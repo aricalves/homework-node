@@ -9,7 +9,6 @@ const getPackageNames = function(count = 10, offset = 0, topPackages = []) {
       const $ = cheerio.load(html);
       // traverse html for every <a> with class 'name'
       $('.name').each((idx, el) => {
-        console.log(idx)
         if (idx < count) {
           offset++;
           const href = el.attribs.href;
@@ -21,14 +20,14 @@ const getPackageNames = function(count = 10, offset = 0, topPackages = []) {
       if (topPackages.length >= count) {
         return topPackages;
       } else {
-        // simple pagination arithmetic with limit/offset
+        // handle pagination
         count -= topPackages.length;
         return getPackageNames(count, offset, topPackages);
       }
     })
     .catch(err => {
-      // write to console for now
-      console.log(err)
+      // TODO: retry failed scrape or write to file
+      console.error(err);
     });
 };
 
